@@ -81,10 +81,6 @@ class Attendance:
         print("Total:", len(self.name), ", checked:", len([row[-1] for row in self.attendance if row[-1]=="O"]))
 
 
-        
-def save_attendance(file):
-    pass
-
 def main(file):
     attendance = Attendance(file)
     try:
