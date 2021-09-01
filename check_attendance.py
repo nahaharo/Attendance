@@ -119,7 +119,9 @@ if __name__ == "__main__":
     parser.add_argument('--csv', required=False, default="attendance.csv", help="path to csv")
     args = parser.parse_args()
     date = today()
-    shutil.copy(args.csv, date+".csv")
+    backup_name = date+".csv"
+    if not os.path.exists(backup_name):
+        shutil.copy(args.csv, backup_name)
     f = open(args.csv, "r+", encoding="UTF-8", newline='')
     main(f)
     f.close()

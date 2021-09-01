@@ -1,6 +1,6 @@
 # Attendance check program
 
-Before run this program, you need csv file like this format
+Before run this program, you need ```attendance.csv``` file like this format
 
 ```csv
 Name
