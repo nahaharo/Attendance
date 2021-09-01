@@ -23,7 +23,9 @@ class Attendance:
                 raise ValueError("Date format in csv is '%Y-%d-%m'")
 
         self.header = attendances[0][1:]
+
         self.name = [row[0] for row in attendances[1:]]
+
         self.attendance = [row[1:] for row in attendances[1:]]
         self.name2idx = {name: idx for idx, name in enumerate(self.name)}
     
@@ -61,12 +63,17 @@ class Attendance:
         self.file.truncate(0)
         writer = csv.writer(self.file, delimiter=",")
         writer.writerow(["Name"]+self.header)
-        for name, attendance in zip(self.name, self.attendance):
-            writer.writerow([name]+attendance)
+        for idx, name in sorted(enumerate(self.name), key=lambda x: x[1]):
+            writer.writerow([name]+self.attendance[idx])
 
     def _print_checked(self):
         for name, check in zip(self.name, [row[-1] for row in self.attendance]):
             if check == "O":
+                print(name)
+    
+    def _print_unchecked(self):
+        for name, check in zip(self.name, [row[-1] for row in self.attendance]):
+            if check == "X":
                 print(name)
 
     def _del_student(self, name):
@@ -85,6 +92,7 @@ def main(file):
     attendance = Attendance(file)
     try:
         while True:
+            print(">> ", end="")
             i = input()
             if len(i) == 0:
                 continue
@@ -95,7 +103,12 @@ def main(file):
                     print("Attendance saved")
                     return
                 if args[0] == ".show":
-                    attendance._print_checked()
+                    if len(args) == 1:
+                        args.append("checked")
+                    if args[1] == "checked":
+                        attendance._print_checked()
+                    elif args[1] == "unchecked":
+                        attendance._print_unchecked()
                 elif args[0] == ".del":
                     if len(args) == 1:
                         print("Need name")
@@ -103,6 +116,8 @@ def main(file):
                         attendance._del_student(args[1])
                 elif args[0] == ".status":
                     attendance._print_status()
+                elif args[0] == ".save":
+                    attendance._save()
                 else:
                     print("Can not find any related command.")
             else:
