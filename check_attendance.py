@@ -28,10 +28,10 @@ class Attendance:
 
         self.attendance = [row[1:] for row in attendances[1:]]
         self.name2idx = {name: idx for idx, name in enumerate(self.name)}
-    
-    def find_and_check(self, name):
         if not today() in self.header:
             self._add_today()
+    
+    def find_and_check(self, name):
         if name in self.name2idx:
             self.attendance[self.name2idx[name]][-1] = "O"
             print(name, 'checked')
